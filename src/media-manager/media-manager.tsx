@@ -33,7 +33,7 @@ export const MediaManager: FC<MediaManagerProps> = ({}) => {
             <CButton color="light" size="sm">
               <CIcon icon={cilFullscreen} size="sm" />
             </CButton>
-            <CButton color="danger" size="sm">
+            <CButton color="primary" size="sm">
               <CIcon icon={cilX} />
             </CButton>
           </div>
