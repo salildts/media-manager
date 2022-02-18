@@ -1,0 +1,68 @@
+{
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build"
+  },
+  "peerDependencies": {
+    "react": ">=16",
+    "@coreui/icons": "^2.1.0",
+    "@coreui/icons-react": "^2.0.1",
+    "@coreui/react": "^4.1.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "name": "@the-devoyage/media-manager",
+  "author": "Nick McLean",
+  "module": "dist/media-manager.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/media-manager.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/media-manager.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^7.0.8",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.11",
+    "husky": "^7.0.4",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "size-limit": "^7.0.8",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.3.1",
+    "typescript": "^3.9.10",
+    "@coreui/icons": "^2.1.0",
+    "@coreui/icons-react": "^2.0.1",
+    "@coreui/react": "^4.1.2"
+  },
+  "dependencies": {
+    "formik": "^2.2.9"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}
