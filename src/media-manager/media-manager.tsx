@@ -1,44 +1,55 @@
-import React, { FC, useContext } from 'react';
-import {
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CButton,
-  CForm,
-  CFormInput,
-} from '@coreui/react';
-import { NavBar } from './components';
-import { ManagerContext } from '../manager-context';
-import CIcon from '@coreui/icons-react';
-import { cilFullscreen, cilX } from '@coreui/icons';
+import React, { FC, useState } from 'react';
+import { CModal } from '@coreui/react';
+import { NavBar, Footer, Body } from './views';
+import { ManagerContext } from '../context';
+import { ModalRoute, ParentContext, Media } from '../types';
+import styled from 'styled-components';
 
-export interface MediaManagerProps {}
+export const MediaManager: FC<ParentContext> = props => {
+  const [fullscreen, setFullscreen] = useState(false);
 
-export const MediaManager: FC<MediaManagerProps> = ({}) => {
-  const { fullscreen } = useContext(ManagerContext);
+  // RouterState
+  const [routeId, setRouteId] = useState<ModalRoute>('home');
+
+  // Media Selection
+  const [selectedMedia, setSelectedMedia] = useState<Media[]>([]);
 
   return (
-    <ManagerContext.Provider value={{ fullscreen: false }}>
-      <CModal visible={true} fullscreen={fullscreen} size="lg">
+    <ManagerContext.Provider
+      value={{
+        modalContext: {
+          fullscreen,
+          setFullscreen,
+        },
+        routerContext: {
+          routeId,
+          setRouteId,
+        },
+        parentContext: {
+          ...props,
+        },
+        mediaSelectionContext: {
+          selectedMedia,
+          setSelectedMedia,
+        },
+      }}
+    >
+      <Modal
+        visible={props.visible}
+        fullscreen={fullscreen}
+        size="lg"
+        scrollable
+      >
         <NavBar />
-        <CModalBody>BODY</CModalBody>
-        <CModalFooter className="d-flex justify-content-between">
-          <CForm className="d-flex">
-            <CFormInput type="search" className="me-2" placeholder="Search" />
-            <CButton type="submit" color="success" variant="outline">
-              Search
-            </CButton>
-          </CForm>
-          <div>
-            <CButton color="light" size="sm">
-              <CIcon icon={cilFullscreen} size="sm" />
-            </CButton>
-            <CButton color="primary" size="sm">
-              <CIcon icon={cilX} />
-            </CButton>
-          </div>
-        </CModalFooter>
-      </CModal>
+        <Body />
+        <Footer />
+      </Modal>
     </ManagerContext.Provider>
   );
 };
+
+const Modal = styled(CModal)`
+  .modal-content {
+    min-height: 92vh;
+  }
+`;
