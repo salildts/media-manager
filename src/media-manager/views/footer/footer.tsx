@@ -15,7 +15,7 @@ export const Footer = () => {
       onNotification,
       setVisible,
     },
-    mediaSelectionContext: { selectedMedia },
+    mediaSelectionContext: { selectedMedia, setSelectedMedia },
   } = useContext(ManagerContext);
 
   // Logic
@@ -35,25 +35,36 @@ export const Footer = () => {
     }
   };
 
+  const handleMediaDelete = () => {
+    if (onMediaDelete) {
+      onMediaDelete(selectedMedia);
+      setSelectedMedia([]);
+    }
+  };
+
   return (
     <CModalFooter className="d-flex justify-content-between">
-      <CTooltip
-        content={
-          !onMediaDelete
-            ? 'Media Delete Disabled'
-            : `Delete ${selectedMedia.length} item(s)?`
-        }
-      >
-        <CButton
-          color="danger"
-          className="mx-2"
-          variant={'outline'}
-          disabled={!selectedMedia.length || !onMediaDelete}
-          onClick={() => onMediaDelete && onMediaDelete(selectedMedia)}
+      {onMediaDelete ? (
+        <CTooltip
+          content={
+            !onMediaDelete
+              ? 'Media Delete Disabled'
+              : `Delete ${selectedMedia.length} item(s)?`
+          }
         >
-          <CIcon icon={cilTrash} />
-        </CButton>
-      </CTooltip>
+          <CButton
+            color="danger"
+            className="mx-2"
+            variant={'outline'}
+            disabled={!selectedMedia.length || !onMediaDelete}
+            onClick={handleMediaDelete}
+          >
+            <CIcon icon={cilTrash} />
+          </CButton>
+        </CTooltip>
+      ) : (
+        <div />
+      )}
       <SearchByName />
       {onMediaSelect ? (
         <CTooltip
@@ -76,7 +87,9 @@ export const Footer = () => {
             <CIcon icon={cilPlus} />
           </CButton>
         </CTooltip>
-      ) : null}
+      ) : (
+        <div />
+      )}
     </CModalFooter>
   );
 };
