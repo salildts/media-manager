@@ -2,7 +2,6 @@ export interface Media {
   _id: string;
   title: string;
   createdAt: Date;
-  updatedAt: Date;
   path: string;
   mimetype: string;
 }
