@@ -30,8 +30,8 @@ export const MediaCard: FC<MediaCardProps> = ({ media }) => {
     <Choose>
       <When condition={media.mimetype.includes('image')}>
         <CTooltip content={media.title}>
-          <ExpandableCard
-            className="my-2 mx-0"
+          <Card
+            className="rounded my-2 mx-0"
             onClick={() => handleMediaSelection(media)}
           >
             <If condition={selectedMedia.some(m => m._id === media._id)}>
@@ -39,14 +39,14 @@ export const MediaCard: FC<MediaCardProps> = ({ media }) => {
                 <CIcon icon={cilCheck} />
               </CBadge>
             </If>
-            <Image src={media.path} className="rounded" />
-          </ExpandableCard>
+            <Image src={media.path} />
+          </Card>
         </CTooltip>
       </When>
       <When condition={media.mimetype.includes('application/pdf')}>
         <CTooltip content={media.title}>
-          <ExpandableCard
-            className="my-2 mx-0"
+          <Card
+            className="rounded my-2 mx-0"
             onClick={() => handleMediaSelection(media)}
           >
             <If condition={selectedMedia.some(m => m._id === media._id)}>
@@ -63,7 +63,7 @@ export const MediaCard: FC<MediaCardProps> = ({ media }) => {
                 height={'100%'}
               />
             </div>
-          </ExpandableCard>
+          </Card>
         </CTooltip>
       </When>
       <Otherwise>
@@ -89,12 +89,15 @@ export const MediaCardLoading = () => {
   );
 };
 
-const ExpandableCard = styled(CCard)`
+const Card = styled(CCard)`
   height: 100px;
   width: 100%;
   border: none;
   cursor: pointer;
   transition: box-shadow ease 0.5s;
+  background-color: black;
+  justify-content: center;
+  overflow: hidden;
 
   :hover {
     box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
