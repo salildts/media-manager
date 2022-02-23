@@ -116,7 +116,7 @@ export const Upload = () => {
                       )}#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0`}
                       type={'application/pdf'}
                       width={'100%'}
-                      height={'300px'}
+                      height={'375px'}
                     />
                   </When>
                   <Otherwise>

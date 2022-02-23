@@ -3,7 +3,7 @@ import { ManagerContextValues } from '../types';
 
 export const ManagerContext = createContext<ManagerContextValues>({
   modalContext: { fullscreen: false, setFullscreen: () => null },
-  routerContext: { routeId: 'home', setRouteId: () => null },
+  routerContext: { routeId: 'library', setRouteId: () => null },
   parentContext: {
     media: [],
     visible: false,

@@ -28,7 +28,7 @@ export interface ModalContext {
 }
 
 // Routes
-export type ModalRoute = 'home' | 'library' | 'upload';
+export type ModalRoute = 'library' | 'upload';
 export interface RouterContext {
   routeId: ModalRoute;
   setRouteId: (v: ModalRoute) => void;

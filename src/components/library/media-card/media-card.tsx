@@ -14,27 +14,12 @@ import { If } from '../../../utils';
 export const MediaCard: FC<MediaCardProps> = ({ media }) => {
   const {
     mediaSelectionContext: { selectedMedia, setSelectedMedia },
-    parentContext: { selectLimit, onNotification },
   } = useContext(ManagerContext);
 
   const handleMediaSelection = (newMedia: Media) => {
-    const canSelectMore = (count: number, limit: number) => {
-      if (count > limit) {
-        onNotification({
-          title: 'Selection Limited',
-          message: `You may only select ${limit} media items for this task.`,
-        });
-        return false;
-      }
-
-      return true;
-    };
     if (!selectedMedia.find(m => m._id === newMedia._id)) {
       setSelectedMedia(m => {
-        if (canSelectMore(m.length + 1, selectLimit ?? 1)) {
-          return [...m, newMedia];
-        }
-        return m;
+        return [...m, newMedia];
       });
     } else {
       setSelectedMedia(m => m.filter(mm => mm._id !== media._id));

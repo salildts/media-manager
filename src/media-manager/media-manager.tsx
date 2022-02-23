@@ -9,7 +9,7 @@ export const MediaManager: FC<ParentContext> = props => {
   const [fullscreen, setFullscreen] = useState(false);
 
   // RouterState
-  const [routeId, setRouteId] = useState<ModalRoute>('home');
+  const [routeId, setRouteId] = useState<ModalRoute>('library');
 
   // Media Selection
   const [selectedMedia, setSelectedMedia] = useState<Media[]>([]);
