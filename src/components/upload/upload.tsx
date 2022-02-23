@@ -21,6 +21,7 @@ import { Otherwise } from '../../utils/otherwise';
 export const Upload = () => {
   const {
     parentContext: { onUpload, loading, validUploadMimeTypes },
+    routerContext: { setRouteId },
   } = useContext(ManagerContext);
 
   return (
@@ -29,6 +30,7 @@ export const Upload = () => {
       onSubmit={(values, helpers) => {
         onUpload && onUpload(values);
         helpers.setSubmitting(false);
+        setRouteId('library');
       }}
     >
       {form => (
