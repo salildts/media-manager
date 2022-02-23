@@ -31,7 +31,7 @@ export const MediaCard: FC<MediaCardProps> = ({ media }) => {
       <When condition={media.mimetype.includes('image')}>
         <CTooltip content={media.title}>
           <ExpandableCard
-            className="my-2"
+            className="my-2 mx-0"
             onClick={() => handleMediaSelection(media)}
           >
             <If condition={selectedMedia.some(m => m._id === media._id)}>
@@ -46,7 +46,7 @@ export const MediaCard: FC<MediaCardProps> = ({ media }) => {
       <When condition={media.mimetype.includes('application/pdf')}>
         <CTooltip content={media.title}>
           <ExpandableCard
-            className="my-2"
+            className="my-2 mx-0"
             onClick={() => handleMediaSelection(media)}
           >
             <If condition={selectedMedia.some(m => m._id === media._id)}>
@@ -68,7 +68,7 @@ export const MediaCard: FC<MediaCardProps> = ({ media }) => {
       </When>
       <Otherwise>
         <CTooltip content={'Unknown Media Type'}>
-          <UnknownMedia className="rounded my-2">
+          <UnknownMedia className="rounded my-2 mx-0">
             <CIcon icon={cilImageBroken} size="xl" />
           </UnknownMedia>
         </CTooltip>
