@@ -46,7 +46,6 @@ export interface ParentContext {
   onRequestMore?: () => void;
   onHandleSearch?: (query: string) => void;
   onUpload?: (upload: MediaUploadProperties) => void;
-  isUploading?: boolean;
   validUploadMimeTypes?: string[];
 }
 
@@ -58,5 +57,5 @@ export interface MediaSelectionContext {
 
 export interface MediaUploadProperties {
   file: File;
-  name: string;
+  title: string;
 }

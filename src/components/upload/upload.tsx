@@ -20,12 +20,12 @@ import { Otherwise } from '../../utils/otherwise';
 
 export const Upload = () => {
   const {
-    parentContext: { onUpload, isUploading, validUploadMimeTypes },
+    parentContext: { onUpload, loading, validUploadMimeTypes },
   } = useContext(ManagerContext);
 
   return (
     <Formik<MediaUploadProperties>
-      initialValues={{ name: '', file: {} as File }}
+      initialValues={{ title: '', file: {} as File }}
       onSubmit={(values, helpers) => {
         onUpload && onUpload(values);
         helpers.setSubmitting(false);
@@ -50,7 +50,7 @@ export const Upload = () => {
                     (e.target as HTMLInputElement).files![0]
                   );
                   form.setFieldValue(
-                    'name',
+                    'title',
                     (e.target as HTMLInputElement).files![0].name
                   );
                 }}
@@ -66,8 +66,8 @@ export const Upload = () => {
                 </CButton>
                 <CFormInput
                   type="text"
-                  name="name"
-                  value={form.values.name}
+                  name="title"
+                  value={form.values.title}
                   onClick={() =>
                     !form.values.file?.name &&
                     document.getElementById('media_input')?.click()
@@ -80,12 +80,12 @@ export const Upload = () => {
                   type="submit"
                   disabled={
                     !form.values.file?.name ||
-                    isUploading ||
+                    loading ||
                     (validUploadMimeTypes &&
                       !validUploadMimeTypes.includes(form.values.file.type))
                   }
                 >
-                  {isUploading ? <CSpinner size="sm" /> : 'Upload'}
+                  {loading ? <CSpinner size="sm" /> : 'Upload'}
                 </CButton>
               </CInputGroup>
               {form.values.file.name ? (
