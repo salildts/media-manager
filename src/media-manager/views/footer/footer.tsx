@@ -13,6 +13,7 @@ export const Footer = () => {
       onMediaDelete,
       selectLimit,
       onNotification,
+      setVisible,
     },
     mediaSelectionContext: { selectedMedia },
   } = useContext(ManagerContext);
@@ -30,6 +31,7 @@ export const Footer = () => {
       }
 
       onMediaSelect(selectedMedia);
+      setVisible(false);
     }
   };
 

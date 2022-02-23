@@ -39,6 +39,7 @@ export const MediaManager: FC<ParentContext> = props => {
         fullscreen={fullscreen}
         size="lg"
         scrollable
+        onClose={() => props.setVisible(false)}
       >
         <NavBar />
         <Body />
