@@ -39,7 +39,7 @@ export const MediaCard: FC<MediaCardProps> = ({ media }) => {
                 <CIcon icon={cilCheck} />
               </CBadge>
             </If>
-            <Image src={media.path} />
+            <Image src={media.path} className="rounded" />
           </Card>
         </CTooltip>
       </When>
@@ -97,7 +97,6 @@ const Card = styled(CCard)`
   transition: box-shadow ease 0.5s;
   background-color: black;
   justify-content: center;
-  overflow: hidden;
 
   :hover {
     box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
