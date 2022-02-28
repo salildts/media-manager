@@ -24,6 +24,58 @@ export const Upload = () => {
     routerContext: { setRouteId },
   } = useContext(ManagerContext);
 
+  const matchMimeType = (file: File) => {
+    if (!validUploadMimeTypes?.includes(file.type)) {
+      window.alert('Invalid File Type');
+      return;
+    }
+
+    switch (file.type) {
+      case 'image/jpeg' || 'image/png' || 'image/jpg':
+        return (
+          <CImage
+            src={URL.createObjectURL(file)}
+            className="my-2 w-100 rounded"
+          />
+        );
+
+      case 'application/pdf':
+        return (
+          <embed
+            className="my-2 rounded border"
+            src={`${URL.createObjectURL(
+              file
+            )}#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0`}
+            type={'application/pdf'}
+            width={'100%'}
+            height={'375px'}
+          />
+        );
+      default:
+        return (
+          <CContainer
+            className="my-2 p-2 rounded d-flex flex-column justify-content-center align-items-center"
+            style={{
+              backgroundColor: 'rgba(0,0,0, 0.1)',
+              minHeight: '300px',
+            }}
+          >
+            <CIcon icon={cilImageBroken} size="3xl" />
+            <h4>
+              <Choose>
+                <When condition={!validUploadMimeTypes}>
+                  <div>Preview Not Available</div>
+                </When>
+                <Otherwise>
+                  <div>Invalid Upload type</div>
+                </Otherwise>
+              </Choose>
+            </h4>
+          </CContainer>
+        );
+    }
+  };
+
   return (
     <Formik<MediaUploadProperties>
       initialValues={{ title: '', file: {} as File }}
@@ -91,58 +143,7 @@ export const Upload = () => {
                 </CButton>
               </CInputGroup>
               {form.values.file.name ? (
-                <Choose>
-                  <When
-                    condition={
-                      form.values.file.type.includes('image') &&
-                      (validUploadMimeTypes?.includes(form.values.file.type) ??
-                        true)
-                    }
-                  >
-                    <CImage
-                      src={URL.createObjectURL(form.values.file)}
-                      className="my-2 w-100 rounded"
-                    />
-                  </When>
-                  <When
-                    condition={
-                      form.values.file.type === 'application/pdf' &&
-                      (validUploadMimeTypes?.includes('application/pdf') ??
-                        true)
-                    }
-                  >
-                    <embed
-                      className="my-2 rounded border"
-                      src={`${URL.createObjectURL(
-                        form.values.file
-                      )}#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0`}
-                      type={'application/pdf'}
-                      width={'100%'}
-                      height={'375px'}
-                    />
-                  </When>
-                  <Otherwise>
-                    <CContainer
-                      className="my-2 p-2 rounded d-flex flex-column justify-content-center align-items-center"
-                      style={{
-                        backgroundColor: 'rgba(0,0,0, 0.1)',
-                        minHeight: '300px',
-                      }}
-                    >
-                      <CIcon icon={cilImageBroken} size="3xl" />
-                      <h4>
-                        <Choose>
-                          <When condition={!validUploadMimeTypes}>
-                            <div>Preview Not Available</div>
-                          </When>
-                          <Otherwise>
-                            <div>Invalid Upload type</div>
-                          </Otherwise>
-                        </Choose>
-                      </h4>
-                    </CContainer>
-                  </Otherwise>
-                </Choose>
+                matchMimeType(form.values.file)
               ) : (
                 <CContainer
                   className="my-2 p-2 rounded d-flex justify-content-center align-items-center"
