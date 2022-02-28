@@ -3,13 +3,9 @@ import { CCard, CImage, CPlaceholder, CBadge, CTooltip } from '@coreui/react';
 import { FC } from 'react';
 import { MediaCardProps, Media } from '../../../types';
 import styled from 'styled-components';
-import { Choose } from '../../../utils/choose';
-import { When } from '../../../utils/when';
-import { Otherwise } from '../../../utils/otherwise';
 import CIcon from '@coreui/icons-react';
 import { cilImageBroken, cilCheck } from '@coreui/icons';
 import { ManagerContext } from '../../../context';
-import { If } from '../../../utils';
 
 export const MediaCard: FC<MediaCardProps> = ({ media }) => {
   const {
@@ -26,55 +22,65 @@ export const MediaCard: FC<MediaCardProps> = ({ media }) => {
     }
   };
 
-  return (
-    <Choose>
-      <When condition={media.mimetype.includes('image')}>
-        <CTooltip content={media.title}>
-          <Card
-            className="rounded my-2 mx-0"
-            onClick={() => handleMediaSelection(media)}
-          >
-            <If condition={selectedMedia.some(m => m._id === media._id)}>
-              <CBadge color="success" position="top-end" shape="rounded">
-                <CIcon icon={cilCheck} />
-              </CBadge>
-            </If>
-            <Image src={media.path} className="rounded" />
-          </Card>
-        </CTooltip>
-      </When>
-      <When condition={media.mimetype.includes('application/pdf')}>
-        <CTooltip content={media.title}>
-          <Card
-            className="rounded my-2 mx-0"
-            onClick={() => handleMediaSelection(media)}
-          >
-            <If condition={selectedMedia.some(m => m._id === media._id)}>
-              <CBadge color="success" position="top-end" shape="rounded">
-                <CIcon icon={cilCheck} />
-              </CBadge>
-            </If>
-            <ClickableOverlay />
-            <div style={{ overflow: 'hidden', width: '100%', height: '100%' }}>
-              <embed
-                src={`${media.path}#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0`}
-                type={media.mimetype}
-                width={'100%'}
-                height={'100%'}
-              />
-            </div>
-          </Card>
-        </CTooltip>
-      </When>
-      <Otherwise>
-        <CTooltip content={'Unknown Media Type'}>
-          <UnknownMedia className="rounded my-2 mx-0">
-            <CIcon icon={cilImageBroken} size="xl" />
-          </UnknownMedia>
-        </CTooltip>
-      </Otherwise>
-    </Choose>
-  );
+  const renderCard = (media: Media) => {
+    console.log(media.mimetype);
+    switch (media.mimetype) {
+      case 'image/png':
+      case 'image/jpeg':
+      case 'image/jpg':
+        return (
+          <CTooltip content={media.title}>
+            <Card
+              className="rounded my-2 mx-0"
+              onClick={() => handleMediaSelection(media)}
+            >
+              {selectedMedia.some(m => m._id === media._id) && (
+                <CBadge color="success" position="top-end" shape="rounded">
+                  <CIcon icon={cilCheck} />
+                </CBadge>
+              )}
+              <Image src={media.path} className="rounded" />
+            </Card>
+          </CTooltip>
+        );
+      case 'application/pdf':
+        return (
+          <CTooltip content={media.title}>
+            <Card
+              className="rounded my-2 mx-0"
+              onClick={() => handleMediaSelection(media)}
+            >
+              {selectedMedia.some(m => m._id === media._id) && (
+                <CBadge color="success" position="top-end" shape="rounded">
+                  <CIcon icon={cilCheck} />
+                </CBadge>
+              )}
+              <ClickableOverlay />
+              <div
+                style={{ overflow: 'hidden', width: '100%', height: '100%' }}
+              >
+                <embed
+                  src={`${media.path}#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0`}
+                  type={media.mimetype}
+                  width={'100%'}
+                  height={'100%'}
+                />
+              </div>
+            </Card>
+          </CTooltip>
+        );
+      default:
+        return (
+          <CTooltip content={'Unknown Media Type'}>
+            <UnknownMedia className="rounded my-2 mx-0">
+              <CIcon icon={cilImageBroken} size="xl" />
+            </UnknownMedia>
+          </CTooltip>
+        );
+    }
+  };
+
+  return renderCard(media);
 };
 
 export const MediaCardLoading = () => {

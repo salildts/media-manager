@@ -20,18 +20,23 @@ import { Otherwise } from '../../utils/otherwise';
 
 export const Upload = () => {
   const {
-    parentContext: { onUpload, loading, validUploadMimeTypes },
+    parentContext: { onUpload, loading, validUploadMimeTypes, onNotification },
     routerContext: { setRouteId },
   } = useContext(ManagerContext);
 
-  const matchMimeType = (file: File) => {
+  const renderPreview = (file: File) => {
     if (!validUploadMimeTypes?.includes(file.type)) {
-      window.alert('Invalid File Type');
+      onNotification({
+        title: 'Invalid upload type.',
+        message: `The type of file you are uploading, ${file.type}, is not a valid type for this task.`,
+      });
       return;
     }
 
     switch (file.type) {
-      case 'image/jpeg' || 'image/png' || 'image/jpg':
+      case 'image/jpeg':
+      case 'image/png':
+      case 'image/jpg':
         return (
           <CImage
             src={URL.createObjectURL(file)}
@@ -143,7 +148,7 @@ export const Upload = () => {
                 </CButton>
               </CInputGroup>
               {form.values.file.name ? (
-                matchMimeType(form.values.file)
+                renderPreview(form.values.file)
               ) : (
                 <CContainer
                   className="my-2 p-2 rounded d-flex justify-content-center align-items-center"

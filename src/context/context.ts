@@ -11,6 +11,7 @@ export const ManagerContext = createContext<ManagerContextValues>({
     loading: false,
     onNotification: () => null,
     hasMore: false,
+    validUploadMimeTypes: [],
   },
   mediaSelectionContext: {
     setSelectedMedia: () => null,
