@@ -1,5 +1,5 @@
 {
-  "version": "0.1.17",
+  "version": "0.1.18",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -13,12 +13,6 @@
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build"
-  },
-  "peerDependencies": {
-    "@coreui/icons": "^2.1.0",
-    "@coreui/icons-react": "^2.0.1",
-    "@coreui/react": "^4.1.2",
-    "react": ">=16"
   },
   "husky": {
     "hooks": {
@@ -44,6 +38,12 @@
       "limit": "10 KB"
     }
   ],
+  "peerDependencies": {
+    "@coreui/icons": ">=2.1.0",
+    "@coreui/icons-react": ">=2.0.1",
+    "@coreui/react": ">=4.1.2",
+    "react": ">=16"
+  },
   "devDependencies": {
     "@coreui/icons": "^2.1.0",
     "@coreui/icons-react": "^2.0.1",

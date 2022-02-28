@@ -7,6 +7,7 @@ import {
   CFormInput,
   CSpinner,
   CFormLabel,
+  CImage,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import { cilFile, cilImageBroken } from '@coreui/icons';
@@ -98,7 +99,7 @@ export const Upload = () => {
                         true)
                     }
                   >
-                    <img
+                    <CImage
                       src={URL.createObjectURL(form.values.file)}
                       className="my-2 w-100 rounded"
                     />
