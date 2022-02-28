@@ -110,7 +110,7 @@ const Card = styled(CCard)`
   }
 `;
 
-const Image = styled(CImage)`
+const Image = styled.img`
   object-fit: cover;
   overflow: hidden;
   background-color: black;
