@@ -47,6 +47,7 @@ export interface ParentContext {
   onHandleSearch?: (query: string) => void;
   onUpload?: (upload: MediaUploadProperties) => void;
   validUploadMimeTypes: string[];
+  acceptFileTypes?: string;
 }
 
 // Media Selection

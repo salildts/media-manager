@@ -23,7 +23,6 @@ export const MediaCard: FC<MediaCardProps> = ({ media }) => {
   };
 
   const renderCard = (media: Media) => {
-    console.log(media.mimetype);
     switch (media.mimetype) {
       case 'image/png':
       case 'image/jpeg':

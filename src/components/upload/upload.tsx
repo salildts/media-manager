@@ -14,13 +14,16 @@ import { cilFile, cilImageBroken } from '@coreui/icons';
 import { Formik } from 'formik';
 import { MediaUploadProperties } from '../../types';
 import { ManagerContext } from '../../context';
-import { Choose } from '../../utils/choose';
-import { When } from '../../utils/when';
-import { Otherwise } from '../../utils/otherwise';
 
 export const Upload = () => {
   const {
-    parentContext: { onUpload, loading, validUploadMimeTypes, onNotification },
+    parentContext: {
+      onUpload,
+      loading,
+      validUploadMimeTypes,
+      onNotification,
+      acceptFileTypes,
+    },
     routerContext: { setRouteId },
   } = useContext(ManagerContext);
 
@@ -48,9 +51,7 @@ export const Upload = () => {
         return (
           <embed
             className="my-2 rounded border"
-            src={`${URL.createObjectURL(
-              file
-            )}#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0`}
+            src={URL.createObjectURL(file)}
             type={'application/pdf'}
             width={'100%'}
             height={'375px'}
@@ -67,14 +68,11 @@ export const Upload = () => {
           >
             <CIcon icon={cilImageBroken} size="3xl" />
             <h4>
-              <Choose>
-                <When condition={!validUploadMimeTypes}>
-                  <div>Preview Not Available</div>
-                </When>
-                <Otherwise>
-                  <div>Invalid Upload type</div>
-                </Otherwise>
-              </Choose>
+              {!validUploadMimeTypes ? (
+                <div>Preview Not Available</div>
+              ) : (
+                <div>Invalid Upload type</div>
+              )}
             </h4>
           </CContainer>
         );
@@ -103,6 +101,7 @@ export const Upload = () => {
                 className="custom-file-input"
                 style={{ height: 0, position: 'absolute' }}
                 id="media_input"
+                accept={acceptFileTypes}
                 onChange={e => {
                   form.setFieldValue(
                     'file',
