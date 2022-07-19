@@ -2,167 +2,144 @@ import React, { useContext } from 'react';
 import {
   CForm,
   CContainer,
-  CInputGroup,
   CButton,
-  CFormInput,
-  CSpinner,
-  CFormLabel,
-  CImage,
+  CRow,
+  CCol,
+  CAlert,
+  CAlertHeading,
+  CBadge,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
-import { cilFile, cilImageBroken } from '@coreui/icons';
-import { Formik } from 'formik';
-import { MediaUploadProperties } from '../../types';
+import { cilFile } from '@coreui/icons';
+import { MediaUploadFormInput } from '../../types';
 import { ManagerContext } from '../../context';
+import { MediaCard } from './components';
 
 export const Upload = () => {
   const {
-    parentContext: {
-      onUpload,
-      loading,
-      validUploadMimeTypes,
-      onNotification,
-      acceptFileTypes,
-    },
-    routerContext: { setRouteId },
+    parentContext: { acceptFileTypes, validUploadMimeTypes },
+    uploadContext: { form },
   } = useContext(ManagerContext);
 
-  const renderPreview = (file: File) => {
-    if (!validUploadMimeTypes?.includes(file.type)) {
-      onNotification({
-        title: 'Invalid upload type.',
-        message: `The type of file you are uploading, ${file.type}, is not a valid type for this task.`,
-      });
-      return;
+  const createMediaUploadFormInput = (files: FileList | null) => {
+    const mediaUploadFormInput: MediaUploadFormInput = { media: [] };
+
+    if (files) {
+      const fileKeys = Object.keys(files ?? {});
+      for (const key of fileKeys) {
+        mediaUploadFormInput.media.push({
+          file: files[(key as unknown) as number],
+          title: files[(key as unknown) as number].name,
+        });
+      }
     }
 
-    switch (file.type) {
-      case 'image/jpeg':
-      case 'image/png':
-      case 'image/jpg':
-        return (
-          <CImage
-            src={URL.createObjectURL(file)}
-            className="my-2 w-100 rounded"
-          />
-        );
+    return mediaUploadFormInput;
+  };
 
-      case 'application/pdf':
-        return (
-          <embed
-            className="my-2 rounded border"
-            src={URL.createObjectURL(file)}
-            type={'application/pdf'}
-            width={'100%'}
-            height={'375px'}
-          />
-        );
-      default:
-        return (
-          <CContainer
-            className="my-2 p-2 rounded d-flex flex-column justify-content-center align-items-center"
-            style={{
-              backgroundColor: 'rgba(0,0,0, 0.1)',
-              minHeight: '300px',
-            }}
-          >
-            <CIcon icon={cilImageBroken} size="3xl" />
-            <h4>
-              {!validUploadMimeTypes ? (
-                <div>Preview Not Available</div>
-              ) : (
-                <div>Invalid Upload type</div>
-              )}
-            </h4>
-          </CContainer>
-        );
+  const isValidMimetypes = (mimetypes: string[]) => {
+    if (validUploadMimeTypes) {
+      for (const m of mimetypes) {
+        if (!validUploadMimeTypes?.includes(m)) {
+          return false;
+        }
+      }
+      return true;
+    } else {
+      return true;
     }
   };
 
   return (
-    <Formik<MediaUploadProperties>
-      initialValues={{ title: '', file: {} as File }}
-      onSubmit={(values, helpers) => {
-        onUpload && onUpload(values);
-        helpers.setSubmitting(false);
-        setRouteId('library');
-      }}
+    <CForm
+      className="d-flex flex-column h-100 w-100"
+      onSubmit={form?.handleSubmit}
     >
-      {form => (
-        <CForm
-          className="d-flex flex-column h-100 w-100"
-          onSubmit={form.handleSubmit}
-        >
-          <CContainer className="d-flex flex-column w-100">
-            <CContainer className="w-100">
-              <CFormLabel>Upload File</CFormLabel>
-              <input
-                type="file"
-                className="custom-file-input"
-                style={{ height: 0, position: 'absolute' }}
-                id="media_input"
-                accept={acceptFileTypes}
-                onChange={e => {
-                  form.setFieldValue(
-                    'file',
-                    (e.target as HTMLInputElement).files![0]
-                  );
-                  form.setFieldValue(
-                    'title',
-                    (e.target as HTMLInputElement).files![0].name
-                  );
-                }}
-              />
-              <CInputGroup>
+      <CContainer className="d-flex flex-column w-100">
+        <CContainer className="w-100">
+          <CAlert color="secondary">
+            <CAlertHeading>Upload Files</CAlertHeading>
+            <CRow>
+              <CCol>Select and name the files you would like to upload.</CCol>
+              <CCol>
                 <CButton
                   color="primary"
+                  className="w-100"
                   onClick={() =>
                     document.getElementById('media_input')?.click()
                   }
                 >
-                  <CIcon icon={cilFile} />
+                  <CIcon icon={cilFile} /> Select Files
                 </CButton>
-                <CFormInput
-                  type="text"
-                  name="title"
-                  value={form.values.title}
-                  onClick={() =>
-                    !form.values.file?.name &&
-                    document.getElementById('media_input')?.click()
-                  }
-                  placeholder="Choose a file to upload."
-                  onChange={form.handleChange}
-                />
-                <CButton
-                  color="success"
-                  type="submit"
-                  disabled={
-                    !form.values.file?.name ||
-                    loading ||
-                    (validUploadMimeTypes &&
-                      !validUploadMimeTypes.includes(form.values.file.type))
-                  }
-                >
-                  {loading ? <CSpinner size="sm" /> : 'Upload'}
-                </CButton>
-              </CInputGroup>
-              {form.values.file.name ? (
-                renderPreview(form.values.file)
-              ) : (
-                <CContainer
-                  className="my-2 p-2 rounded d-flex justify-content-center align-items-center"
-                  style={{
-                    backgroundColor: 'rgba(0,0,0, 0.1)',
-                    minHeight: '300px',
-                  }}
-                >
-                  <CIcon icon={cilFile} size="3xl" />
+              </CCol>
+            </CRow>
+          </CAlert>
+          <input
+            type="file"
+            multiple
+            className="custom-file-input"
+            style={{ height: 0, position: 'absolute' }}
+            id="media_input"
+            accept={acceptFileTypes}
+            onChange={e => {
+              const mediaUploadFormInput = createMediaUploadFormInput(
+                e.target.files
+              );
+              form?.setFieldValue('media', mediaUploadFormInput.media);
+            }}
+          />
+          {form?.values.media.length ? (
+            <>
+              <CRow
+                lg={{
+                  gutter: 4,
+                  cols:
+                    form.values.media.length < 3 ? form.values.media.length : 3,
+                }}
+                xs={{ gutter: 4, cols: 1 }}
+              >
+                {form.values.media.map((m, idx) => (
+                  <CCol key={`${m.file.name}-${idx}`}>
+                    <MediaCard
+                      media={m}
+                      idx={idx}
+                      form={form}
+                      handleRemove={() =>
+                        form.setFieldValue(
+                          'media',
+                          form.values.media.filter((_, index) => idx !== index)
+                        )
+                      }
+                      isValidMimetype={isValidMimetypes([m.file.type])}
+                    />
+                  </CCol>
+                ))}
+              </CRow>
+            </>
+          ) : (
+            <>
+              <CAlert
+                color="warning"
+                className="d-flex justify-content-center align-items-center"
+              >
+                <CAlertHeading className="mb-0">
+                  No Files Selected
+                </CAlertHeading>
+              </CAlert>
+              <CAlert color="info d-flex flex-column justify-content-center align-items-center">
+                <CAlertHeading>Valid File Types</CAlertHeading>
+                <CContainer className="w-100 d-flex justify-content-center">
+                  {acceptFileTypes?.split(' ').map(t => (
+                    <CBadge color="info" className="mx-1" key={t}>
+                      {t}
+                    </CBadge>
+                  ))}
                 </CContainer>
-              )}
-            </CContainer>
-          </CContainer>
-        </CForm>
-      )}
-    </Formik>
+              </CAlert>
+            </>
+          )}
+        </CContainer>
+      </CContainer>
+    </CForm>
   );
 };

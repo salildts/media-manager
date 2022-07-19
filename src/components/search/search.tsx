@@ -4,7 +4,7 @@ import { ManagerContext } from '../../context';
 
 export const SearchByName = () => {
   const {
-    parentContext: { onHandleSearch },
+    parentContext: { onHandleSearch, searchValue },
   } = useContext(ManagerContext);
 
   return (
@@ -15,6 +15,7 @@ export const SearchByName = () => {
       placeholder="Search"
       name="name"
       className="w-50"
+      value={searchValue}
     />
   );
 };

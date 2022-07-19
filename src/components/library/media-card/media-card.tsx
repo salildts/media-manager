@@ -38,7 +38,7 @@ export const MediaCard: FC<MediaCardProps> = ({ media }) => {
                   <CIcon icon={cilCheck} />
                 </CBadge>
               )}
-              <Image src={media.path} className="rounded" />
+              <Image src={media.src} className="rounded" />
             </Card>
           </CTooltip>
         );
@@ -59,7 +59,7 @@ export const MediaCard: FC<MediaCardProps> = ({ media }) => {
                 style={{ overflow: 'hidden', width: '100%', height: '100%' }}
               >
                 <embed
-                  src={`${media.path}#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0`}
+                  src={media.src}
                   type={media.mimetype}
                   width={'100%'}
                   height={'100%'}

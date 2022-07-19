@@ -8,10 +8,18 @@ import {
   CButton,
   CAlert,
   CAlertHeading,
+  CTable,
+  CTableHead,
+  CTableHeaderCell,
+  CTableBody,
+  CTableRow,
+  CTableDataCell,
 } from '@coreui/react';
+import { MediaListRow } from './media-list-row';
 
 export const Library = () => {
   const {
+    modalContext: { listView },
     parentContext: { media, loading, hasMore, onRequestMore },
     routerContext: { routeId },
   } = useContext(ManagerContext);
@@ -35,32 +43,67 @@ export const Library = () => {
   }
 
   return (
-    <CContainer>
-      <CRow className="my-2">
-        {media.length ? (
-          media.map(m => (
-            <CCol lg={3} key={m._id}>
-              <MediaCard media={m} />
+    <CContainer className="d-flex flex-column h-100 justify-content-between">
+      {listView ? (
+        <CTable hover>
+          <CTableHead>
+            <CTableRow>
+              <CTableHeaderCell>Title</CTableHeaderCell>
+              <CTableHeaderCell>ID</CTableHeaderCell>
+              <CTableHeaderCell>Type</CTableHeaderCell>
+              <CTableHeaderCell>Share</CTableHeaderCell>
+            </CTableRow>
+          </CTableHead>
+          <CTableBody>
+            {media.length ? (
+              media.map(m => <MediaListRow media={m} key={m._id} />)
+            ) : (
+              <CTableRow>
+                <CTableDataCell colSpan={5}>
+                  <NoMediaFound />
+                </CTableDataCell>
+              </CTableRow>
+            )}
+          </CTableBody>
+        </CTable>
+      ) : (
+        <CRow>
+          {media.length ? (
+            media.map(m => (
+              <CCol lg={3} key={m._id}>
+                <MediaCard media={m} />
+              </CCol>
+            ))
+          ) : (
+            <CCol>
+              <NoMediaFound />
             </CCol>
-          ))
-        ) : (
-          <CAlert color="primary">
-            <CAlertHeading>No Media</CAlertHeading>Upload media using the upload
-            tab in order to add media to your account
-          </CAlert>
-        )}
-      </CRow>
+          )}
+        </CRow>
+      )}
       {hasMore && (
-        <CButton
-          className="w-100"
-          size="sm"
-          color="primary"
-          disabled={!hasMore}
-          onClick={() => hasMore && onRequestMore && onRequestMore()}
-        >
-          More
-        </CButton>
+        <CRow>
+          <CCol>
+            <CButton
+              className="w-100"
+              color="primary"
+              disabled={!hasMore}
+              onClick={() => hasMore && onRequestMore && onRequestMore()}
+            >
+              More
+            </CButton>
+          </CCol>
+        </CRow>
       )}
     </CContainer>
+  );
+};
+
+const NoMediaFound = () => {
+  return (
+    <CAlert color="primary">
+      <CAlertHeading>No Media</CAlertHeading>Upload media using the upload tab
+      in order to add media to your account
+    </CAlert>
   );
 };

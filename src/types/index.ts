@@ -1,7 +1,9 @@
+import { FormikProps } from 'formik';
+
 export interface Media {
   _id: string;
   title: string;
-  path: string;
+  src: string;
   mimetype: string;
 }
 
@@ -19,10 +21,13 @@ export interface ManagerContextValues {
   routerContext: RouterContext;
   parentContext: ParentContext;
   mediaSelectionContext: MediaSelectionContext;
+  uploadContext: UploadContext;
 }
 export interface ModalContext {
   fullscreen: boolean;
   setFullscreen: (v: boolean) => void;
+  listView: boolean;
+  setListView: (v: boolean) => void;
 }
 
 // Routes
@@ -45,9 +50,10 @@ export interface ParentContext {
   onMediaDelete?: (media: Media[]) => void;
   onRequestMore?: () => void;
   onHandleSearch?: (query: string) => void;
-  onUpload?: (upload: MediaUploadProperties) => void;
-  validUploadMimeTypes: string[];
+  onUpload?: (upload: MediaUploadFormInput) => void;
+  validUploadMimeTypes?: string[];
   acceptFileTypes?: string;
+  searchValue?: string;
 }
 
 // Media Selection
@@ -56,7 +62,10 @@ export interface MediaSelectionContext {
   selectedMedia: Media[];
 }
 
-export interface MediaUploadProperties {
-  file: File;
-  title: string;
+export interface MediaUploadFormInput {
+  media: { file: File; title: string }[];
+}
+
+export interface UploadContext {
+  form: FormikProps<MediaUploadFormInput> | null;
 }
