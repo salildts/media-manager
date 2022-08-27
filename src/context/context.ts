@@ -2,7 +2,12 @@ import { createContext } from 'react';
 import { ManagerContextValues } from '../types';
 
 export const ManagerContext = createContext<ManagerContextValues>({
-  modalContext: { fullscreen: false, setFullscreen: () => null },
+  modalContext: {
+    fullscreen: false,
+    setFullscreen: () => null,
+    listView: false,
+    setListView: () => null,
+  },
   routerContext: { routeId: 'library', setRouteId: () => null },
   parentContext: {
     media: [],
@@ -16,5 +21,8 @@ export const ManagerContext = createContext<ManagerContextValues>({
   mediaSelectionContext: {
     setSelectedMedia: () => null,
     selectedMedia: [],
+  },
+  uploadContext: {
+    form: null,
   },
 });

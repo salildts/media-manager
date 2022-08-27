@@ -1,1 +1,1 @@
-export * from './serach';
+export * from './search';

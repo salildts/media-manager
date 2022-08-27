@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import { CModalFooter, CButton, CTooltip } from '@coreui/react';
+import { CModalFooter, CButton, CTooltip, CSpinner } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
-import { cilTrash, cilPlus } from '@coreui/icons';
+import { cilTrash } from '@coreui/icons';
 import { ManagerContext } from '../../../context';
 import { SearchByName } from '../../../components/search';
 
@@ -11,26 +11,22 @@ export const Footer = () => {
     parentContext: {
       onMediaSelect,
       onMediaDelete,
-      selectLimit,
-      onNotification,
+      selectLimit = 0,
       setVisible,
+      loading,
+      onUpload,
     },
     mediaSelectionContext: { selectedMedia, setSelectedMedia },
+    routerContext: { routeId },
+    uploadContext: { form },
   } = useContext(ManagerContext);
 
   // Logic
 
   const handleSubmit = () => {
     if (onMediaSelect) {
-      if (selectedMedia.length > (selectLimit ?? 1)) {
-        onNotification({
-          title: 'Maximum Exceeded',
-          message: 'You have selected too many items for this task.',
-        });
-        return;
-      }
-
       onMediaSelect(selectedMedia);
+      setSelectedMedia([]);
       setVisible(false);
     }
   };
@@ -44,51 +40,48 @@ export const Footer = () => {
 
   return (
     <CModalFooter className="d-flex justify-content-between">
-      {onMediaDelete ? (
-        <CTooltip
-          content={
-            !onMediaDelete
-              ? 'Media Delete Disabled'
-              : `Delete ${selectedMedia.length} item(s)?`
-          }
+      <CTooltip
+        content={
+          !onMediaDelete
+            ? 'Media Delete Disabled'
+            : `Delete ${selectedMedia.length} item(s)?`
+        }
+      >
+        <CButton
+          color="danger"
+          className="mx-2"
+          variant={'outline'}
+          disabled={!selectedMedia.length || !onMediaDelete}
+          onClick={handleMediaDelete}
         >
-          <CButton
-            color="danger"
-            className="mx-2"
-            variant={'outline'}
-            disabled={!selectedMedia.length || !onMediaDelete}
-            onClick={handleMediaDelete}
-          >
-            <CIcon icon={cilTrash} />
-          </CButton>
-        </CTooltip>
-      ) : (
-        <div />
-      )}
+          <CIcon icon={cilTrash} />
+        </CButton>
+      </CTooltip>
       <SearchByName />
-      {onMediaSelect ? (
-        <CTooltip
-          content={
-            selectedMedia.length > (selectLimit ?? 1)
-              ? `You may only select ${selectLimit ?? 1} item for this task.`
-              : `Choose up to ${selectLimit ?? 1} item(s).`
-          }
-        >
+      {routeId === 'library' ? (
+        <>
           <CButton
-            color={
-              selectedMedia.length > (selectLimit ?? 1) ? 'danger' : 'success'
+            color={!onMediaSelect ? 'danger' : 'success'}
+            disabled={
+              !onMediaSelect ||
+              !selectedMedia.length ||
+              selectedMedia.length > (selectLimit ?? 0)
             }
-            variant={
-              selectedMedia.length > (selectLimit ?? 1) ? 'outline' : undefined
-            }
-            disabled={!onMediaSelect || !selectedMedia.length}
             onClick={handleSubmit}
           >
-            <CIcon icon={cilPlus} />
+            {selectedMedia.length > selectLimit ? 'Too Many' : 'Select'}
           </CButton>
-        </CTooltip>
+        </>
       ) : (
-        <div />
+        <>
+          <CButton
+            color={!onUpload ? 'danger' : 'success'}
+            disabled={!form?.values.media.length || !onUpload}
+            onClick={form?.submitForm}
+          >
+            {!loading ? 'Upload' : <CSpinner size="sm" />}
+          </CButton>
+        </>
       )}
     </CModalFooter>
   );

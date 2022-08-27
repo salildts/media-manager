@@ -22,7 +22,7 @@ export const NavBar = () => {
   const [visible, setVisible] = useState(false);
   const {
     routerContext: { setRouteId, routeId },
-    modalContext: { setFullscreen, fullscreen },
+    modalContext: { setFullscreen, fullscreen, listView, setListView },
   } = useContext(ManagerContext);
 
   return (
@@ -37,12 +37,17 @@ export const NavBar = () => {
           >
             <CIcon icon={cilMenu} />
           </CNavbarToggler>
-          <CNavbarBrand>Media Manager</CNavbarBrand>
+          <CNavbarBrand className="d-none d-lg-block">
+            Media Manager
+          </CNavbarBrand>
           <CCollapse className="navbar-collapse" visible={visible}>
             <CNavbarNav>
               <CNavItem>
                 <CNavLink
-                  onClick={() => setRouteId('library')}
+                  onClick={() => {
+                    setRouteId('library');
+                    setVisible(false);
+                  }}
                   style={{ cursor: 'pointer' }}
                   active={routeId === 'library'}
                 >
@@ -51,7 +56,10 @@ export const NavBar = () => {
               </CNavItem>
               <CNavItem>
                 <CNavLink
-                  onClick={() => setRouteId('upload')}
+                  onClick={() => {
+                    setVisible(false);
+                    setRouteId('upload');
+                  }}
                   style={{ cursor: 'pointer' }}
                   active={routeId === 'upload'}
                 >
@@ -61,11 +69,11 @@ export const NavBar = () => {
               <CDropdown variant="nav-item" popper={false}>
                 <CDropdownToggle>Settings</CDropdownToggle>
                 <CDropdownMenu>
-                  <CDropdownItem
-                    onClick={() => setFullscreen(!fullscreen)}
-                    active={fullscreen}
-                  >
-                    Full Screen
+                  <CDropdownItem onClick={() => setFullscreen(!fullscreen)}>
+                    {!fullscreen ? 'Full Screen' : 'Pop up'}
+                  </CDropdownItem>
+                  <CDropdownItem onClick={() => setListView(!listView)}>
+                    {listView ? 'Card View' : 'List View'}
                   </CDropdownItem>
                 </CDropdownMenu>
               </CDropdown>

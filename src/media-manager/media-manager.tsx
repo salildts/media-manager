@@ -2,11 +2,18 @@ import React, { FC, useState } from 'react';
 import { CModal } from '@coreui/react';
 import { NavBar, Footer, Body } from './views';
 import { ManagerContext } from '../context';
-import { ModalRoute, ParentContext, Media } from '../types';
+import {
+  ModalRoute,
+  ParentContext,
+  Media,
+  MediaUploadFormInput,
+} from '../types';
 import styled from 'styled-components';
+import { useFormik } from 'formik';
 
 export const MediaManager: FC<ParentContext> = props => {
   const [fullscreen, setFullscreen] = useState(false);
+  const [listView, setListView] = useState(false);
 
   // RouterState
   const [routeId, setRouteId] = useState<ModalRoute>('library');
@@ -14,12 +21,44 @@ export const MediaManager: FC<ParentContext> = props => {
   // Media Selection
   const [selectedMedia, setSelectedMedia] = useState<Media[]>([]);
 
+  const isValidMimetypes = (mimetypes: string[]) => {
+    if (props.validUploadMimeTypes) {
+      for (const m of mimetypes) {
+        if (!props.validUploadMimeTypes?.includes(m)) {
+          return false;
+        }
+      }
+      return true;
+    } else {
+      return true;
+    }
+  };
+
+  const form = useFormik<MediaUploadFormInput>({
+    initialValues: { media: [] },
+    onSubmit: (values, helpers) => {
+      if (!isValidMimetypes(values.media.map(m => m.file.type))) {
+        props.onNotification({
+          title: 'Invalid upload type.',
+          message: 'Please remove the invalid file type.',
+        });
+        return;
+      }
+      props.onUpload && props.onUpload(values);
+      helpers.setSubmitting(false);
+      setRouteId('library');
+      helpers.resetForm();
+    },
+  });
+
   return (
     <ManagerContext.Provider
       value={{
         modalContext: {
           fullscreen,
           setFullscreen,
+          listView,
+          setListView,
         },
         routerContext: {
           routeId,
@@ -31,6 +70,9 @@ export const MediaManager: FC<ParentContext> = props => {
         mediaSelectionContext: {
           selectedMedia,
           setSelectedMedia,
+        },
+        uploadContext: {
+          form,
         },
       }}
     >
