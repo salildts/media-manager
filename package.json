@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.2.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -25,7 +25,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "@the-devoyage/media-manager",
+  "name": "@salildts/media-manager",
   "author": "Nick McLean",
   "module": "dist/media-manager.esm.js",
   "size-limit": [
