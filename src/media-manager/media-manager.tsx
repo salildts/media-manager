@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { CModal } from '@coreui/react';
 import { NavBar, Footer, Body } from './views';
 import { ManagerContext } from '../context';
@@ -51,6 +51,10 @@ export const MediaManager: FC<ParentContext> = props => {
     },
   });
 
+  useEffect(() => {
+    console.log('--------------- Media manager ----------------')
+  }, [])
+
   return (
     <ManagerContext.Provider
       value={{
@@ -77,6 +81,7 @@ export const MediaManager: FC<ParentContext> = props => {
       }}
     >
       <Modal
+        backdrop={props.backdrop || true}
         visible={props.visible}
         fullscreen={fullscreen}
         size="lg"
