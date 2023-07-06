@@ -52,7 +52,7 @@ export const MediaManager: FC<ParentContext> = props => {
   });
 
   useEffect(() => {
-    console.log('--------------- Media manager ----------------')
+    console.log('--------------- Media manager section ----------------')
   }, [])
 
   return (
