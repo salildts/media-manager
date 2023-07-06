@@ -100,7 +100,7 @@ const Card = styled(CCard)`
   border: none;
   cursor: pointer;
   transition: box-shadow ease 0.5s;
-  background-color: black;
+  background-color: white;
   justify-content: center;
 
   :hover {
@@ -118,7 +118,7 @@ const Card = styled(CCard)`
 const Image = styled(CImage)`
   object-fit: cover;
   overflow: hidden;
-  background-color: black;
+  background-color: white;
 
   : hover {
     object-fit: contain;
